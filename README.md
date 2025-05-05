@@ -131,6 +131,7 @@ You can calculate the SSIM value of each image in your dataset by following this
 
 ## Model Hub
 
+TODOs
 | name | pretrain | resolution |acc@1 |  #params | FLOPs | 1K model| Agri170K model |
 | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
 | VCNU-T | ImageNet-1K | 224x224 | 78.2 | 12M | 2.3G | [baidu]()  | - |
@@ -150,7 +151,7 @@ You can click this [link]() to download Agri170K-val.
 
 ## Acknowledge
 
-Our implementations are partially inspired by [swintransformer](https://github.com/microsoft/Swin-Transformer).
+Our implementations are partially inspired by [Swin Transformer](https://github.com/microsoft/Swin-Transformer).
 
 Thanks for their great works!
 
