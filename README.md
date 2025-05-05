@@ -19,7 +19,7 @@
 * [X] training and validation code.
 * [X] Agri170K dataset (val).
 *  Agri170K dataset (train-val).
-* [X] Release the checkpoints.
+*  Release the checkpoints.
 
 
 ## 🏠 Abstract
@@ -122,14 +122,36 @@ python -m torch.distributed.launch --nproc_per_node <num-of-gpus-to-use>  main.p
 --cfg <config-file, e.g.,  configs/vcnu_agri17k/vcnn/pretrain/vcnu_small_agri17k.yaml > --data-path <imagenet-path> [--batch-size <batch-size-per-gpu> --output <output-directory> --tag <job-tag>]
 ```
 
-### model hub
+## Using UMA for your dataset
 
-To validate the effectiveness of diffusion tuning in specific tasks, we constructed a vertical domain supervised fine-tuning dataset for agricultural mechanization specialization - AgriMachine28K.  We then used LLaMA3.1-8B-Instruct as a base model and DT-3 as a training method on the AgriMachine28K and fine-tuning the base model to obtain AgriMaTech-LLaMA, a large language model in the field of assisted learning and teaching.  
+You can calculate the SSIM value of each image in your dataset by following this step: 
+1. Using 'uma_tools/statistic_uma_strategy1.py' & 'uma_tools/statistic_uma_strategy2.py' to calculate the SSIM value of each image in the dataset.
+   Then you can get the Excel file (named ssim_origin_excel_file), which contains the SSIM value of each image in your dataset 
+2. Using 'uma_tools/count_frequency.py' to calculate the frequency distribution P in your dataset.
 
-you can click this [link](https://drive.google.com/drive/folders/1UYfqghaAWC0uqddyE6odlaGjKrjlsvQR?usp=drive_link) to download AgriMaTech-LLaMA.
+## Model Hub
+
+| name | pretrain | resolution |acc@1 |  #params | FLOPs | 1K model| Agri170K model |
+| :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |:---: |:---: |
+| VCNU-T | ImageNet-1K | 224x224 | 78.2 | 12M | 2.3G | [baidu]()  | - |
+| VCNU-S | ImageNet-1K | 224x224 | 80.8 |  21M | 4G | [baidu]()  | [baidu]()  |
+| VCNU-B | ImageNet-1K | 224x224 | 81.8 |  37M | 6.8G | [baidu]() | - |
+| VCogM-T | ImageNet-1K | 224x224 | 82.4 | 25M | 4.3G | [baidu]() | [baidu]()  |
+| VCogM-S | ImageNet-22K | 224x224 | 83.9 |  48M | 8.7G | [baidu]()  | - |
+| VCogM-B | ImageNet-22K | 224x224 | 84.4 |  92M | 17.1G | [baidu]()  | - |
+
+## Model Hub
+
+You can click this [link]() to download Agri170K-val. 
 
 **Notes**:
 
-- The weights provided in the link are exclusively for LORA (Low-Rank Adaptation). You can load these weights using peft.PeftModel.from_pretrained provided by Hugging Face.
+- Due to the investment of funds for the work, we will make the training data publicly available after the article has been accepted.
+
+## Acknowledge
+
+Our implementations are partially inspired by [swintransformer](https://github.com/microsoft/Swin-Transformer).
+
+Thanks for their great works!
 
 ## Citation
