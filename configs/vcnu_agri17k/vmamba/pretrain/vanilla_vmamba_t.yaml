@@ -1,0 +1,37 @@
+DATA:
+  DATASET: agri17k
+  IMG_SIZE: 224
+MODEL:
+  TYPE: vmamba
+  NAME: vanilla_vmamba_t_agri17k
+  VMAMBA: 
+    DEPTHS: [2, 2, 4, 2]
+    DIMS: 96
+    DROP_PATH_RATE: 0.2
+    PATCH_SIZES: 4
+    IN_CHANS: 3
+    SSM_D_STATE: 64
+    SSM_RATIO: 1.0
+    SSM_DT_RANK: auto
+    SSM_ACT_LAYER: gelu
+    SSM_CONV: 3
+    SSM_CONV_BIAS: False
+    SSM_DROP_RATE: 0.
+    SSM_INIT: v2
+    SSM_FORWARDTYPE: m0_noz
+    MLP_RATIO: 4.0
+    MLP_ACT_LAYER: gelu
+    MLP_DROP_RATE: 0.0
+    GMLP: False
+    PATCH_NORM: True
+    NORM_LAYER: ln
+    DOWNSAMPLE_VERSION: v3
+    PATCHEMBED_VERSION: v2
+    POSEMBED: False
+TRAIN:
+  EPOCHS: 120
+  WARMUP_EPOCHS: 5
+  BASE_LR: 1e-3
+  WARMUP_LR: 1e-7
+  MIN_LR: 1e-6
+SAVE_FREQ: 50

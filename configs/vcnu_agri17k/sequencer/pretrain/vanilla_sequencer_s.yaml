@@ -1,0 +1,24 @@
+DATA:
+  DATASET: agri17k
+  IMG_SIZE: 224
+MODEL:
+  TYPE: vanillasequencer
+  NAME: vanilla_sequencer_s_agri17k
+  VANILLA_SEQUENCER:
+    IN_CHANS: 3
+    LAYERS: [4, 3, 8, 3]
+    PATCH_SIZES: [14, 1, 1, 1]
+    EMBED_DIMS: [384, 384, 384, 384]
+    HIDDEN_SIZES: [192, 192, 192, 192]
+    MLP_RATIOS: [3.0, 3.0, 3.0, 3.0]
+    BIDIRECTIONAL: True
+    SHUFFLE: False
+    APE: False
+    DROP_PATH_RATE: 0. 
+TRAIN:
+  EPOCHS: 120
+  WARMUP_EPOCHS: 5
+  BASE_LR: 1e-3
+  WARMUP_LR: 1e-7
+  MIN_LR: 1e-6
+SAVE_FREQ: 50

@@ -1,0 +1,16 @@
+DATA:
+  DATASET: imagenet22K
+MODEL:
+  TYPE: convnext
+  NAME: convnext_large_224_22k
+  DROP_PATH_RATE: 0.1
+  VCNU_CONVNEXT:
+    DIMS: [192, 384, 768, 1536]
+    DEPTHS: [ 3, 3, 27, 3]
+    LAYER_SCALE_INIT_VALUE: 1e-6
+TRAIN:
+  EPOCHS: 90
+  WARMUP_EPOCHS: 5
+  BASE_LR: 4e-3
+  MIN_LR: 1e-6
+SAVE_FREQ: 30

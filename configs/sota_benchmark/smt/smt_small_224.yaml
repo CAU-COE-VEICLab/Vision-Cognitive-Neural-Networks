@@ -1,0 +1,22 @@
+MODEL:
+  TYPE: smt
+  NAME: smt_small_224
+  DROP_PATH_RATE: 0.2
+  VCNU_SMT:
+    EMBED_DIMS: [64, 128, 256, 512]
+    CA_NUM_HEADS: [4, 4, 4, -1]
+    SA_NUM_HEADS: [-1, -1, 8, 16]
+    MLP_RATIOS: [4, 4, 4, 2]
+    QKV_BIAS: True
+    DEPTHS: [3, 4, 18, 2]
+    CA_ATTENTIONS: [ 1, 1, 1, 0 ]
+    HEAD_CONV: 3
+    EXPAND_RATIO: 2
+TRAIN:
+  WARMUP_EPOCHS: 5
+  BASE_LR: 1e-3
+  WARMUP_LR: 1e-7
+  MIN_LR: 1e-6
+AUG:
+  MIXUP: 0.2
+SAVE_FREQ: 50

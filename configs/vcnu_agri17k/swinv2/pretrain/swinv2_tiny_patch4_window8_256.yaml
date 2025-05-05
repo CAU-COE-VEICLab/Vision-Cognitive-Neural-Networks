@@ -1,0 +1,19 @@
+DATA:
+  DATASET: agri17k
+  IMG_SIZE: 224
+MODEL:
+  TYPE: swinv2
+  NAME: swinv2_tiny_patch4_window8_256_agri17k
+  DROP_PATH_RATE: 0.2
+  SWINV2:
+    EMBED_DIM: 96
+    DEPTHS: [ 2, 2, 6, 2 ]
+    NUM_HEADS: [ 3, 6, 12, 24 ]
+    WINDOW_SIZE: 7
+TRAIN:
+  EPOCHS: 120
+  WARMUP_EPOCHS: 5
+  BASE_LR: 1e-3
+  WARMUP_LR: 1e-7
+  MIN_LR: 1e-6
+SAVE_FREQ: 50

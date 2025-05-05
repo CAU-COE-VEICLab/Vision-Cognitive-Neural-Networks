@@ -1,0 +1,20 @@
+DATA:
+  DATASET: agri17k
+  IMG_SIZE: 224
+MODEL:
+  TYPE: vil
+  NAME: vanilla_vil_b_agri17k
+  VIL:
+    DIM: 768
+    INPUT_SHAPE: [3, 224, 224]
+    PATCH_SIZES: 16
+    DEPTH: 24
+    DROP_PATH_RATE: 0.
+    STRIDE: None
+TRAIN:
+  EPOCHS: 120
+  WARMUP_EPOCHS: 5
+  BASE_LR: 1e-3
+  WARMUP_LR: 1e-7
+  MIN_LR: 1e-6
+SAVE_FREQ: 50

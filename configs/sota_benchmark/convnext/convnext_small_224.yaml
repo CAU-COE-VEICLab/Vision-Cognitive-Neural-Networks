@@ -1,0 +1,16 @@
+MODEL:
+  TYPE: convnext
+  NAME: convnext_small_224
+  DROP_PATH_RATE: 0.4
+  VCNU_CONVNEXT:
+    DIMS: [96, 192, 384, 768]
+    DEPTHS: [ 3, 3, 27, 3]
+    LAYER_SCALE_INIT_VALUE: 1e-6
+TRAIN:
+  WARMUP_EPOCHS: 20
+  WEIGHT_DECAY: 0.05
+  BASE_LR: 2e-3
+  WARMUP_LR: 5e-7
+  MIN_LR: 5e-7
+  CLIP_GRAD: None
+SAVE_FREQ: 50

@@ -1,0 +1,24 @@
+DATA:
+  DATASET: agri17k
+  IMG_SIZE: 224
+MODEL:
+  TYPE: spectformer_hierarchical
+  NAME: vanilla_spectformer_b_agri17k
+  SPECTFORMER:
+    IN_CHANS: 3
+    STEM_HIDDEN_DIM: 64
+    EMBED_DIMS: [64, 128, 320, 512]
+    NUM_HEADS: [2, 4, 10, 16]
+    MLP_RATIOS: [8, 8, 4, 4]
+    DROP_PATH_RATE: 0.
+    DEPTHS: [3, 4, 12, 3]
+    SR_RATIOS: [4, 2, 1, 1]
+    NUM_STAGES: 4
+    TOKEN_LABEL: True
+TRAIN:
+  EPOCHS: 120
+  WARMUP_EPOCHS: 5
+  BASE_LR: 1e-3
+  WARMUP_LR: 1e-7
+  MIN_LR: 1e-6
+SAVE_FREQ: 50
