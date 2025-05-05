@@ -132,7 +132,7 @@ You can calculate the SSIM value of each image in your dataset by following this
 ## Model Hub
 
 | name | pretrain | resolution |acc@1 |  #params | FLOPs | 1K model| Agri170K model |
-| :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |:---: |:---: |
+| :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
 | VCNU-T | ImageNet-1K | 224x224 | 78.2 | 12M | 2.3G | [baidu]()  | - |
 | VCNU-S | ImageNet-1K | 224x224 | 80.8 |  21M | 4G | [baidu]()  | [baidu]()  |
 | VCNU-B | ImageNet-1K | 224x224 | 81.8 |  37M | 6.8G | [baidu]() | - |
