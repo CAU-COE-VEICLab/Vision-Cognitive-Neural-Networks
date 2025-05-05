@@ -4,9 +4,9 @@ This is the code base for **`"The potential of cognitive-inspired neural network
 ## 🏠 TODOs
 
 * [X] training and validation code.
-* [-] Agri17K dataset (val).
-* [] Agri17K dataset (train-val).
-* [] Release the checkpoints.
+*  Agri17K dataset (val).
+*  Agri17K dataset (train-val).
+*  Release the checkpoints.
 
 
 ## 🏠 Abstract
