@@ -1,5 +1,18 @@
-# Vision-Cognitive-Neural-Networks
-This is the code base for **`"The potential of cognitive-inspired neural network modeling framework for computer vision processing tasks"`** submitted to Advanced Science in 2025.
+<div align="center">
+
+<h1>The potential of cognitive-inspired neural network modeling framework <br /> for computer vision processing tasks <br /></h1> 
+
+<div>
+    <a>Guorun Li</a>;
+    <a>Lei Liu</a>;
+    <a>Xiaoyu Li</a>;
+    <a>Yuefeng Du</a>;
+</div>
+
+<h3><strong>submitted to Advanced Science in 2025</strong></h3>
+
+</div>
+
 
 ## 🏠 TODOs
 
