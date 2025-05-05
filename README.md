@@ -141,7 +141,11 @@ TODOs
 | VCogM-S | ImageNet-22K | 224x224 | 83.9 |  48M | 8.7G | [baidu]()  | - |
 | VCogM-B | ImageNet-22K | 224x224 | 84.4 |  92M | 17.1G | [baidu]()  | - |
 
-## Model Hub
+## Agri170K dataset
+
+We constructed a large-scale agricultural image dataset-Agri170K, comprising **96** categories and **173691** high-quality annotated images. 
+
+These images cover various scenes, including fruits, animals, crops, and agricultural machinery. 
 
 You can click this [link]() to download Agri170K-val. 
 
