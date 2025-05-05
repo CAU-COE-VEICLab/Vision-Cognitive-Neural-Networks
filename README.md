@@ -17,9 +17,9 @@
 ## 🏠 TODOs
 
 * [X] training and validation code.
-*  Agri17K dataset (val).
-*  Agri17K dataset (train-val).
-*  Release the checkpoints.
+* [X] Agri170K dataset (val).
+*  Agri170K dataset (train-val).
+* [X] Release the checkpoints.
 
 
 ## 🏠 Abstract
@@ -85,28 +85,44 @@ load data:
 
 ### Evaluation
 
-To evaluate a pre-trained `Swin Transformer` on ImageNet val, run:
+To evaluate a pre-trained `VCogM` on ImageNet val, run:
+
+```bash
+python -m torch.distributed.launch --nproc_per_node <num-of-gpus-to-use>  main.py --eval \
+--cfg <config-file, e.g.,  configs/sota_benchmark/vcnn/vcm_tiny_1k.yaml > --pretrained <checkpoint> --data-path <imagenet-path> 
+```
+
+To evaluate a pre-trained `VCogM` on Agri170K val, run:
 
 ```bash
 python -m torch.distributed.launch --nproc_per_node <num-of-gpus-to-use>  main_diffusion_tuning.py --eval \
---cfg <config-file> --pretrained <checkpoint> --data-path <imagenet-path> 
+--cfg <config-file, e.g., configs/vcnu_agri17k/vcnn/pretrain/vcm_tiny_agri17k.yaml> --pretrained <checkpoint> --data-path <imagenet-path> 
 ```
 
-**Notes**:
+## Training from scratch 
 
-- Please note that when testing the results of Diffusion Tuning (DT1~DT4), select the configuration file (--cfg) of the original model (the yaml file that does not contain 'dt').
-
-For example, to evaluate the `Swin-B-DT1` with a single GPU:
+To train the `VCogM-48M` on ImageNet1k, run:
 
 ```bash
-python -m torch.distributed.launch --nproc_per_node 1 main_diffusion_tuning.py --eval \
---cfg configs/diffusion_finetune/swin/swin/swin_base_patch4_window7_224_22kto1k_finetune.yaml --pretrained dt1_swin_base_patch4_window7_224_22k.pth --data-path <imagenet-path>
+python -m torch.distributed.launch --nproc_per_node <num-of-gpus-to-use>  main.py \
+--cfg <config-file, e.g.,  configs/sota_benchmark/vcnn/vcm_small_1k.yaml > --data-path <imagenet-path> [--batch-size <batch-size-per-gpu> --output <output-directory> --tag <job-tag>]
 ```
 
+To train the `VCogM-24.7M` on Agri170K, run:
 
-## Practical Application
+```bash
+python -m torch.distributed.launch --nproc_per_node <num-of-gpus-to-use>  main.py \
+--cfg <config-file, e.g.,  configs/vcnu_agri17k/vcnn/pretrain/vcm_tiny_agri17k.yaml > --data-path <imagenet-path> [--batch-size <batch-size-per-gpu> --output <output-directory> --tag <job-tag>]
+```
 
-### AgriMaTech-LLaMA
+To train the `VCNU-20.8M` on Agri170K, run:
+
+```bash
+python -m torch.distributed.launch --nproc_per_node <num-of-gpus-to-use>  main.py \
+--cfg <config-file, e.g.,  configs/vcnu_agri17k/vcnn/pretrain/vcnu_small_agri17k.yaml > --data-path <imagenet-path> [--batch-size <batch-size-per-gpu> --output <output-directory> --tag <job-tag>]
+```
+
+### model hub
 
 To validate the effectiveness of diffusion tuning in specific tasks, we constructed a vertical domain supervised fine-tuning dataset for agricultural mechanization specialization - AgriMachine28K.  We then used LLaMA3.1-8B-Instruct as a base model and DT-3 as a training method on the AgriMachine28K and fine-tuning the base model to obtain AgriMaTech-LLaMA, a large language model in the field of assisted learning and teaching.  
 
