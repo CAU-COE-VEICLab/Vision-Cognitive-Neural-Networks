@@ -15,8 +15,8 @@ Visual computation models represented by deep neural networks (VDNNs) focus on r
 
 ## 🏠 Overview
 ![figure1](figure/figure1.png)
-![imagenet1k](figure/fiureg2.png)
-![agri171k](figure/fiureg3.png)
+![imagenet1k](figure/figure2.png)
+![agri171k](figure/figure3.png)
 
 ## 🎁 Train and Test
 We have provided detailed instructions for model training and testing and experimental details. 
