@@ -4,9 +4,9 @@
 # Written by Guorun Li
 # --------------------------------------------------------
 
-# you can calculate the ssim value of each image in your dataset followed this step: 
-# 1. Using 'statistic_uma_strategy1.py' & 'statistic_uma_strategy2.py' to calculate the ssim value of each image in the dataset.
-# then you can get the excel file (named ssim_origin_excel_file) which contains the ssim value of each image in your dataset 
+# You can calculate the SSIM value of each image in your dataset by following this step: 
+# 1. Using 'statistic_uma_strategy1.py' & 'statistic_uma_strategy2.py' to calculate the SSIM value of each image in the dataset.
+#    Then you can get the Excel file (named ssim_origin_excel_file), which contains the SSIM value of each image in your dataset 
 # 2. Using 'count_frequency.py' to calculate the frequency distribution P in your dataset.
 
 import openpyxl
