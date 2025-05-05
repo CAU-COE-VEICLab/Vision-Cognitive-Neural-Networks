@@ -39,8 +39,8 @@ We have provided detailed instructions for model training and testing and experi
 ```bash
 conda create -n dt python=3.10 -y
 conda activate dt
-git clone https://github.com/CAU-COE-VEICLab/Diffusion-Tuning.git
-cd Diffusion-Tuning
+git clone git@github.com:CAU-COE-VEICLab/Vision-Cognitive-Neural-Networks.git
+cd Vision-Cognitive-Neural-Networks
 ```
 - Install `CUDA>=10.2` with `cudnn>=7` following
   the [official installation instructions](https://docs.nvidia.com/cuda/cuda-installation-guide-linux/index.html)
