@@ -18,8 +18,8 @@
 
 * [X] training and validation code.
 * [X] Agri170K dataset (val).
-*  Agri170K dataset (train-val).
-*  Release the checkpoints.
+* [ ] Agri170K dataset (train-val).
+* [ ] Release the checkpoints.
 
 
 ## 🏠 Abstract
