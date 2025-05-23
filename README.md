@@ -39,7 +39,7 @@ We have provided detailed instructions for model training and testing and experi
 ```bash
 conda create -n dt python=3.10 -y
 conda activate dt
-git clone git@github.com:CAU-COE-VEICLab/Vision-Cognitive-Neural-Networks.git
+git clone https://github.com/CAU-COE-VEICLab/Vision-Cognitive-Neural-Networks.git
 cd Vision-Cognitive-Neural-Networks
 ```
 - Install `CUDA>=10.2` with `cudnn>=7` following
