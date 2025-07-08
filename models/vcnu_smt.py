@@ -1,3 +1,9 @@
+# --------------------------------------------------------
+# The potential of cognitive-inspired neural network modeling framework for computer vision
+# Licensed under The MIT License [see LICENSE for details]
+# Written by Guorun Li
+# --------------------------------------------------------
+
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
@@ -11,9 +17,7 @@ import math
 from torchvision import transforms
 from timm.data.constants import IMAGENET_DEFAULT_MEAN, IMAGENET_DEFAULT_STD
 from timm.data import create_transform
-# from timm.data.transforms import _pil_interp
 from .memory import Memory, LayerNorm, UMA, MemoryDownSampling
-import math
 
 class Mlp(nn.Module):
     def __init__(self, in_features, hidden_features=None, out_features=None, act_layer=nn.GELU, drop=0.):
@@ -353,6 +357,8 @@ class VCNU_SMT(nn.Module):
             setattr(self, f"block{i + 1}", block)
             setattr(self, f"norm{i + 1}", norm)
 
+        # If you wish to reproduce the results of ConvNext-PBM on ImageNet1K from scratch, 
+        # please refer to VCNNs_vcm.py Lines 380-384 and Lines 442-446 to construct the memory-assisted loss.
         self.block4[-1].t2d_memory_attention.update_ltm = nn.Identity()
         self.block4[-1].t2d_memory_attention.norm_ltm = nn.Identity()
 
@@ -447,7 +453,6 @@ class VCNU_SMT(nn.Module):
 
     def freeze_transferlearning(self):
         for name, param in self.named_parameters():
-            # print(name)
             if 't2d_memory_attention' not in name:
                 param.requires_grad = False
 
@@ -476,44 +481,6 @@ class DWConv(nn.Module):
         x = x.flatten(2).transpose(1, 2)
 
         return x
-
-
-# def build_transforms(img_size, center_crop=False):
-#     t = []
-#     if center_crop:
-#         size = int((256 / 224) * img_size)
-#         t.append(
-#             transforms.Resize(size, interpolation=_pil_interp('bicubic'))
-#         )
-#         t.append(
-#             transforms.CenterCrop(img_size)
-#         )
-#     else:
-#         t.append(
-#             transforms.Resize(img_size, interpolation=_pil_interp('bicubic'))
-#         )
-#     t.append(transforms.ToTensor())
-#     t.append(transforms.Normalize(IMAGENET_DEFAULT_MEAN, IMAGENET_DEFAULT_STD))
-#     return transforms.Compose(t)
-#
-#
-# def build_transforms4display(img_size, center_crop=False):
-#     t = []
-#     if center_crop:
-#         size = int((256 / 224) * img_size)
-#         t.append(
-#             transforms.Resize(size, interpolation=_pil_interp('bicubic'))
-#         )
-#         t.append(
-#             transforms.CenterCrop(img_size)
-#         )
-#     else:
-#         t.append(
-#             transforms.Resize(img_size, interpolation=_pil_interp('bicubic'))
-#         )
-#     t.append(transforms.ToTensor())
-#     return transforms.Compose(t)
-
 
 def smt_t(pretrained=False, **kwargs):
     model = VCNU_SMT(
@@ -550,17 +517,11 @@ def smt_l(pretrained=False, **kwargs):
     return model
 
 def test(num_classes: int = 1000, **kwargs):
-    # trained ImageNet-1K
-    # https://github.com/SwinTransformer/storage/releases/download/v1.0.0/swin_tiny_patch4_window7_224.pth
     model = VCNU_SMT(
         is_efficient_finetune=True,
         filter_strategy1=23, filter_strategy2=7, pretrain_image_size=224, patch_size=4,
         ab_norm_attn=True, ab_norm_ltm=False, model_style='trans',
 
-        # embed_dims= [56, 112, 224, 448],#[64, 128, 256, 512], 
-        # ca_num_heads=[4, 4, 4, -1], sa_num_heads=[-1, -1, 8, 16],
-        # mlp_ratios=[4, 4, 4, 2],
-        # qkv_bias=True, depths=[3, 4, 18, 2], ca_attentions=[1, 1, 1, 0], head_conv=3, expand_ratio=2, **kwargs
         embed_dims=[96, 192, 384, 768], ca_num_heads=[4, 4, 4, -1], sa_num_heads=[-1, -1, 8, 16], mlp_ratios=[8, 6, 4, 2], 
         qkv_bias=True, depths=[4, 6, 28, 4], ca_attentions=[1, 1, 1, 0], head_conv=7, expand_ratio=2, **kwargs
 
@@ -568,13 +529,9 @@ def test(num_classes: int = 1000, **kwargs):
     return model
 
 def count_gradients(model):
-    # 计算需要计算梯度的参数量
+
     num_trainable_params = sum(p.numel() for p in model.parameters() if p.requires_grad)
-
-    # 计算总参数量
     total_params = sum(p.numel() for p in model.parameters())
-
-    # 计算比值
     ratio = num_trainable_params / total_params
 
     return total_params, num_trainable_params, ratio
@@ -586,19 +543,12 @@ if __name__ == '__main__':
     import time
 
     print(torch.__version__)
-    # net = swinFocus_tiny_patch4_window7_224().cuda()
     net = test().cuda()
-    import torchsummary
 
-    # torchsummary.summary(net)
     print(net)
     image = torch.rand(1, 3, 224, 224).cuda()
-    # time_step=torch.tensor([999] * 1, device="cuda")
-    # f, p = get_model_complexity_info(net, image, as_strings=True, print_per_layer_stat=False, verbose=False)
-    # f, p = profile(net, inputs=(image, time_step))
 
     f, p = profile(net, inputs=(image,))
-    # f, p = summary(net, (image, time_step))
     print('flops:%f' % f)
     print('params:%f' % p)
     print('flops: %.1f G, params: %.1f M' % (f / 1e9, p / 1e6))

@@ -1,5 +1,5 @@
 # --------------------------------------------------------
-# The potential of cognitive-inspired neural network modeling framework for computer vision processing tasks
+# The potential of cognitive-inspired neural network modeling framework for computer vision
 # Licensed under The MIT License [see LICENSE for details]
 # Written by Guorun Li
 # --------------------------------------------------------
@@ -26,7 +26,7 @@ from lr_scheduler import build_scheduler
 from optimizer import build_optimizer
 from logger import create_logger
 from utils import load_checkpoint, load_pretrained, save_checkpoint, NativeScalerWithGradNormCount, auto_resume_helper, \
-    reduce_tensor, save_checkpoint_guorun
+    reduce_tensor, save_checkpoint_best
 
 # pytorch major version (1.x or 2.x)
 PYTORCH_MAJOR_VERSION = int(torch.__version__.split('.')[0])
@@ -180,7 +180,7 @@ def main(config):
         max_accuracy = max(max_accuracy, acc1)
         logger.info(f'Max accuracy: {max_accuracy:.2f}%')
         if max_accuracy == acc1 and dist.get_rank() == 0:
-            save_checkpoint_guorun(config, epoch, model_without_ddp, max_accuracy, optimizer, lr_scheduler, loss_scaler,
+            save_checkpoint_best(config, epoch, model_without_ddp, max_accuracy, optimizer, lr_scheduler, loss_scaler,
                                    logger)
 
     total_time = time.time() - start_time
@@ -209,8 +209,14 @@ def train_one_epoch(config, model, criterion, data_loader, optimizer, epoch, mix
 
         with torch.cuda.amp.autocast(enabled=config.AMP_ENABLE):
             outputs = model(samples)
-        loss = criterion(outputs, targets)
-        loss = loss / config.TRAIN.ACCUMULATION_STEPS
+
+        if isinstance(outputs, tuple):
+            loss_x = criterion(outputs[0], targets)
+            loss_auxliary = criterion(outputs[1], targets)
+            loss = (loss_x + 0.5 * loss_auxliary) / config.TRAIN.ACCUMULATION_STEPS
+        else:    
+            loss = criterion(outputs, targets)
+            loss = loss / config.TRAIN.ACCUMULATION_STEPS
 
         # this attribute is added by timm on one optimizer (adahessian)
         is_second_order = hasattr(optimizer, 'is_second_order') and optimizer.is_second_order
@@ -266,6 +272,9 @@ def validate(config, data_loader, model):
         # compute output
         with torch.cuda.amp.autocast(enabled=config.AMP_ENABLE):
             output = model(images)
+
+        if isinstance(output, tuple):
+            output = output[0]
 
         # measure accuracy and record loss
         loss = criterion(output, target)

@@ -1,9 +1,8 @@
-# Copyright (c) Meta Platforms, Inc. and affiliates.
-
-# All rights reserved.
-
-# This source code is licensed under the license found in the
-# LICENSE file in the root directory of this source tree.
+# --------------------------------------------------------
+# The potential of cognitive-inspired neural network modeling framework for computer vision
+# Licensed under The MIT License [see LICENSE for details]
+# Written by Guorun Li
+# --------------------------------------------------------
 
 
 import torch
@@ -156,7 +155,9 @@ class VCNU_ConvNeXt(nn.Module):
                 self.memory_downsampling.append(memory_downsampling)
             self.stages.append(stage)
             cur += depths[i]
-
+ 
+        # If you wish to reproduce the results of ConvNext-PBM on ImageNet1K from scratch, 
+        # please refer to VCNNs_vcm.py Lines 380-384 and Lines 442-446 to construct the memory-assisted loss.
         self.stages[-1][-1].t2d_memory_attention.update_ltm = nn.Identity()
         self.stages[-1][-1].t2d_memory_attention.norm_ltm = nn.Identity()
 
@@ -223,7 +224,6 @@ class VCNU_ConvNeXt(nn.Module):
 
     def freeze_transferlearning(self):
         for name, param in self.named_parameters():
-            # print(name)
             if 't2d_memory_attention' not in name:
                 param.requires_grad = False
 
@@ -326,8 +326,6 @@ def vcnu_convnext_xlarge(pretrained=False, in_22k=False, **kwargs):
 
 
 def test(num_classes: int = 1000, **kwargs):
-    # trained ImageNet-1K
-    # https://github.com/SwinTransformer/storage/releases/download/v1.0.0/swin_tiny_patch4_window7_224.pth
     model = VCNU_ConvNeXt(
         is_efficient_finetune=True,
         filter_strategy1=23, filter_strategy2=7,  ab_norm_attn=True, ab_norm_ltm=False, model_style='trans',
@@ -336,13 +334,9 @@ def test(num_classes: int = 1000, **kwargs):
     return model
 
 def count_gradients(model):
-    # 计算需要计算梯度的参数量
+
     num_trainable_params = sum(p.numel() for p in model.parameters() if p.requires_grad)
-
-    # 计算总参数量
     total_params = sum(p.numel() for p in model.parameters())
-
-    # 计算比值
     ratio = num_trainable_params / total_params
 
     return total_params, num_trainable_params, ratio
@@ -354,19 +348,12 @@ if __name__ == '__main__':
     import time
 
     print(torch.__version__)
-    # net = swinFocus_tiny_patch4_window7_224().cuda()
     net = test().cuda()
-    import torchsummary
 
-    # torchsummary.summary(net)
     print(net)
     image = torch.rand(1, 3, 224, 224).cuda()
-    # time_step=torch.tensor([999] * 1, device="cuda")
-    # f, p = get_model_complexity_info(net, image, as_strings=True, print_per_layer_stat=False, verbose=False)
-    # f, p = profile(net, inputs=(image, time_step))
 
     f, p = profile(net, inputs=(image,))
-    # f, p = summary(net, (image, time_step))
     print('flops:%f' % f)
     print('params:%f' % p)
     print('flops: %.1f G, params: %.1f M' % (f / 1e9, p / 1e6))

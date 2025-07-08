@@ -1,6 +1,5 @@
 # --------------------------------------------------------
-# VisionCNUnit
-# Copyright (c) 2024 CAU
+# The potential of cognitive-inspired neural network modeling framework for computer vision
 # Licensed under The MIT License [see LICENSE for details]
 # Written by Guorun Li
 # --------------------------------------------------------
@@ -640,6 +639,8 @@ class VCNU_SwinTransformer(nn.Module):
                                fused_window_process=fused_window_process)
             self.layers.append(layer)
 
+        # If you wish to reproduce the results of ConvNext-PBM on ImageNet1K from scratch, 
+        # please refer to VCNNs_vcm.py Lines 380-384 and Lines 442-446 to construct the memory-assisted loss.
         self.layers[-1].blocks[-1].t2d_memory_attention.update_ltm = nn.Identity()
         self.layers[-1].blocks[-1].t2d_memory_attention.norm_ltm = nn.Identity()
 
@@ -681,12 +682,7 @@ class VCNU_SwinTransformer(nn.Module):
         memorystream = self.uma(x)
         # reshape -> [B, L, C]
         memorystream = memorystream.flatten(2).transpose(1, 2).contiguous()
-        # _, _, Hmb, Wmb = memorystream.shape
-        # pad_l = pad_t = 0
-        # pad_rmb = (W // self.patch_size) - Wmb
-        # pad_bmb = (H // self.patch_size) - Hmb
-        # if pad_rmb > 0 or pad_bmb > 0:
-        #     memorystream = F.pad(memorystream, (pad_l, pad_rmb, pad_t, pad_bmb, 0, 0, 0, 0))
+
         if self.model_style == 'conv':
             assert memorystream.shape[
                        1] == self.memory_dim, f"fast fourier transform error! pleace check fastFourierTrans() function. now the memory dim is {memorystream.shape[1]}, should be {self.memory_dim}!"
@@ -723,10 +719,8 @@ class VCNU_SwinTransformer(nn.Module):
 
     def freeze_transferlearning(self):
         for name, param in self.named_parameters():
-            # print(name)
             if 't2d_memory_attention' not in name:
                 param.requires_grad = False
-
             if 'memory_embedding' in name:
                 param.requires_grad = True
             if 'head' in name:
@@ -789,22 +783,15 @@ def freeze_transferlearning(model):
             param.requires_grad = False
         if 't2d_memory_attention.norm' in name:
             param.requires_grad = False
-
-
-    # 检查是否已正确冻结权重
     for name, param in model.named_parameters():
         print(f'Layer: {name}, Trainable: {param.requires_grad}')
 
     return model
 
 def count_gradients(model):
-    # 计算需要计算梯度的参数量
+
     num_trainable_params = sum(p.numel() for p in model.parameters() if p.requires_grad)
-
-    # 计算总参数量
     total_params = sum(p.numel() for p in model.parameters())
-
-    # 计算比值
     ratio = num_trainable_params / total_params
 
     return total_params, num_trainable_params, ratio
@@ -816,21 +803,14 @@ if __name__ == '__main__':
     import time
 
     print(torch.__version__)
-    # net = swinFocus_tiny_patch4_window7_224().cuda()
-    net = test_SYNA().cuda()
 
-    # pretrained_weight_path = r'D:\MLpractice\PytorchPractice\TrainOnImageNet1K-FocusNet-V100\2024\mam_classifier\pretrain_weights\swin_transformer\1k\swin_tiny_patch4_window7_224.pth'
-    # msg = net.load_state_dict(torch.load(pretrained_weight_path, map_location='cpu')['model'], strict=False)
-    # print(msg)
+    net = test_SYNA().cuda()
 
     print(net)
     image = torch.rand(1, 3, 224, 224).cuda()
-    # time_step=torch.tensor([999] * 1, device="cuda")
-    # f, p = get_model_complexity_info(net, image, as_strings=True, print_per_layer_stat=False, verbose=False)
-    # f, p = profile(net, inputs=(image, time_step))
 
     f, p = profile(net, inputs=(image,))
-    # f, p = summary(net, (image, time_step))
+
     print('flops:%f' % f)
     print('params:%f' % p)
     print('flops: %.1f G, params: %.1f M' % (f / 1e9, p / 1e6))
@@ -846,19 +826,3 @@ if __name__ == '__main__':
 
     print('infer_time:', time.time() - s)
     print("FPS:%f" % (1 / (time.time() - s)))
-
-    print(out.shape)
-
-    # for name, param in net.named_parameters():
-    #     print(name)
-    #     if 't2d_memory_attention' not in name:
-    #         param.requires_grad = False
-    #     if 't2d_memory_attention.norm' in name:
-    #         param.requires_grad = False
-    #
-    # # 检查是否已正确冻结权重
-    # for name, param in net.named_parameters():
-    #     print(f'Layer: {name}, Trainable: {param.requires_grad}')
-    # model = freeze_transferlearning(net)
-    # for name, param in model.named_parameters():
-    #     print(f'Layer: {name}, Trainable: {param.requires_grad}')

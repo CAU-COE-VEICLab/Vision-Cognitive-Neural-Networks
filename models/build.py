@@ -1,5 +1,5 @@
 # --------------------------------------------------------
-# The potential of cognitive-inspired neural network modeling framework for computer vision processing tasks
+# The potential of cognitive-inspired neural network modeling framework for computer vision
 # Licensed under The MIT License [see LICENSE for details]
 # Written by Guorun Li
 # --------------------------------------------------------

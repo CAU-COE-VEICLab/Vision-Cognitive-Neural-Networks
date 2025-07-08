@@ -156,117 +156,6 @@ def load_pretrained_hjbface_agri17k(config, model, logger):
     torch.cuda.empty_cache()
 
 
-def load_pretrained_agri42k(config, model, logger):
-    logger.info(f"==============> Loading weight {config.MODEL.PRETRAINED} for fine-tuning......")
-    if config.MODEL.TYPE in ['resnet', 'vit', 'vgg19', 'vgg16', 'mobilenetv3_l', 'mobilenetv3_s', 'mobilenetv2', 'xception', 'mobilevit', 'pvt', 'efficientnet_v2', 'convnext', 'densenet201']:
-        state_dict = load_agri42k_simple_func(config, model, logger)
-    else:
-        state_dict = load_swin_func(config, model, logger)
-
-    if state_dict is not None:
-        if config.DATA.DATASET == 'agri32k':
-            state_dict = init_classifier_head(state_dict=state_dict, model_name=config.MODEL.TYPE, model=model)
-            logger.warning(f"Transfering in loading classifier head, re-init classifier head to std=0.02")
-        elif config.DATA.DATASET == 'imagenet':
-            logger.warning(f"pretrain and test in imagenet1k")
-            pass
-        else:
-            logger.warning(f"agri32k training function! just support test in imagenet1k and trainig in agri32k!")
-        msg = model.load_state_dict(state_dict, strict=False)
-        logger.warning(msg)
-
-    else:   # efficientnetv2
-        load_from_path(model=model, pretrained_path=config.MODEL.PRETRAINED)
-        if config.DATA.DATASET == 'agri32k':
-            torch.nn.init.constant_(model.head.classifier.bias, 0.)
-            torch.nn.init.normal_(model.head.classifier.weight, 0.02)
-        elif config.DATA.DATASET == 'imagenet':
-            logger.warning(f"model name {config.MODEL.TYPE} : pretrain and test in imagenet1k")
-            pass
-        else:
-            logger.warning(f"model name {config.MODEL.TYPE} : agri32k training function! just support test in imagenet1k and trainig in agri32k!")
-    logger.info(f"=> loaded successfully '{config.MODEL.PRETRAINED}'")
-
-    torch.cuda.empty_cache()
-
-def load_pretrained_agri(config, model, logger):
-    logger.info(f"==============> Loading weight {config.MODEL.PRETRAINED} for fine-tuning......")
-    if config.MODEL.TYPE in ['resnet', 'vit', 'vgg19', 'vgg16', 'mobilenetv3_l', 'mobilenetv3_s', 'mobilenetv2', 'xception', 'mobilevit', 'pvt', 'efficientnet_v2', 'convnext','densenet201']:
-        state_dict = load_simple_func(config, model, logger)
-    else:
-        state_dict = load_swin_func(config, model, logger)
-
-    if state_dict is not None:
-        if config.DATA.DATASET == 'agri32k':
-            state_dict = init_classifier_head(state_dict=state_dict, model_name=config.MODEL.TYPE, model=model)
-            logger.warning(f"Transfering in loading classifier head, re-init classifier head to std=0.02")
-        elif config.DATA.DATASET == 'imagenet':
-            logger.warning(f"pretrain and test in imagenet1k")
-            pass
-        else:
-            logger.warning(f"agri32k training function! just support test in imagenet1k and trainig in agri32k!")
-        msg = model.load_state_dict(state_dict, strict=False)
-        logger.warning(msg)
-
-    else:   # efficientnetv2
-        load_from_path(model=model, pretrained_path=config.MODEL.PRETRAINED)
-        if config.DATA.DATASET == 'agri32k':
-            torch.nn.init.constant_(model.head.classifier.bias, 0.)
-            torch.nn.init.normal_(model.head.classifier.weight, 0.02)
-        elif config.DATA.DATASET == 'imagenet':
-            logger.warning(f"model name {config.MODEL.TYPE} : pretrain and test in imagenet1k")
-            pass
-        else:
-            logger.warning(f"model name {config.MODEL.TYPE} : agri32k training function! just support test in imagenet1k and trainig in agri32k!")
-    logger.info(f"=> loaded successfully '{config.MODEL.PRETRAINED}'")
-
-    torch.cuda.empty_cache()
-
-
-def load_agri42k_simple_func(config, model, logger):
-    checkpoint = torch.load(config.MODEL.PRETRAINED, map_location='cpu')
-    state_dict = checkpoint['model']
-
-    del checkpoint
-    return state_dict
-
-def load_simple_func(config, model, logger):
-    model_name = config.MODEL.TYPE
-    if model_name in ['convnext', 'resnet', 'vgg19', 'vgg16', 'mobilenetv3_l', 'mobilenetv3_s', 'mobilenetv2', 'xception',  'pvt']:
-        checkpoint = torch.load(config.MODEL.PRETRAINED, map_location='cpu')
-        state_dict = checkpoint
-
-    elif model_name == 'vit':
-        checkpoint = torch.load(config.MODEL.PRETRAINED, map_location='cpu')
-        state_dict = checkpoint
-        # Change size of positional embeddings
-        if config.DATA.IMG_SIZE != 384:
-            logger.warning(f"model name {model_name}, input data size {config.DATA.IMG_SIZE}")
-            posemb = state_dict['positional_embedding.pos_embedding']
-            posemb_new = model.state_dict()['positional_embedding.pos_embedding']
-            state_dict['positional_embedding.pos_embedding'] = \
-                resize_positional_embedding_(posemb=posemb, posemb_new=posemb_new,
-                                            has_class_token=hasattr(model, 'class_token'))
-            logger.info(f'Resized positional embeddings from {posemb.shape} to {posemb_new.shape}')
-
-    elif model_name == 'mobilevit':
-        checkpoint = torch.load(config.MODEL.PRETRAINED, map_location='cpu')
-        state_dict = checkpoint.get('state_dict', checkpoint)
-        for key in list(state_dict.keys()):
-            state_dict[key.replace('module.', '')] = state_dict.pop(key)
-
-    elif model_name == 'efficientnet_v2':
-        state_dict = checkpoint = None
-        logger.warning(f"Error in loading {model_name}, passing......")
-
-    elif model_name == 'densenet201':
-        checkpoint = torch.load(config.MODEL.PRETRAINED, map_location='cpu')
-        state_dict = densenet_load_state_dict(weights=checkpoint)
-
-    del checkpoint
-    return state_dict
-
-
 def load_swin_func(config, model, logger):
     checkpoint = torch.load(config.MODEL.PRETRAINED, map_location='cpu')
     if 'model' in checkpoint:
@@ -429,7 +318,7 @@ def save_checkpoint(config, epoch, model, max_accuracy, optimizer, lr_scheduler,
     logger.info(f"{save_path} saved !!!")
 
 
-def save_checkpoint_guorun(config, epoch, model, max_accuracy, optimizer, lr_scheduler, loss_scaler, logger):
+def save_checkpoint_best(config, epoch, model, max_accuracy, optimizer, lr_scheduler, loss_scaler, logger):
     save_state = {'model': model.state_dict(),
                   'optimizer': optimizer.state_dict(),
                   'lr_scheduler': lr_scheduler.state_dict(),

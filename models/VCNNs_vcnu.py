@@ -1,5 +1,5 @@
 # --------------------------------------------------------
-# The potential of cognitive-inspired neural network modeling framework for computer vision processing tasks
+# The potential of cognitive-inspired neural network modeling framework for computer vision
 # Licensed under The MIT License [see LICENSE for details]
 # Written by Guorun Li
 # --------------------------------------------------------
@@ -373,12 +373,12 @@ class VisionCognitiveNeuralUnits(nn.Module):
             )
             self.layers.append(layers)
             image_size_layer = image_size_layer // 2
-        self.layers[-1].blocks[-1].vcnu.t2d_memory_attention.update_ltm = nn.Identity()
-        self.layers[-1].blocks[-1].vcnu.t2d_memory_attention.norm_ltm = nn.Identity()
 
         self.normhead = nn.BatchNorm2d(self.num_features) 
+        self.normhead_memory = nn.BatchNorm2d(self.memory_dim) 
         self.avgpool = nn.AdaptiveAvgPool1d(1)
         self.head = nn.Linear(self.num_features, num_classes) if num_classes > 0 else nn.Identity()
+        self.head_memory = nn.Linear(self.memory_dim, num_classes) if num_classes > 0 else nn.Identity()
         self.apply(self._init_weights)
 
     def _init_weights(self, m):
@@ -434,12 +434,17 @@ class VisionCognitiveNeuralUnits(nn.Module):
         x = self.avgpool(x.flatten(-2, -1))
         x = torch.flatten(x, 1)
         x = self.head(x)
-        return x
+        
+        memory = self.normhead_memory(memory)
+        memory = self.avgpool(memory.flatten(-2, -1))
+        memory = torch.flatten(memory, 1)
+        memory = self.head_memory(memory)
+        return (x, memory)
 
 
 def vcnu_small(num_classes: int = 1000, **kwargs):
 
-    model = VisionCognitiveNeuralUnit(
+    model = VisionCognitiveNeuralUnits(
         use_layerscale=True,
         layerscale_value=1e-4,
 
@@ -478,6 +483,5 @@ if __name__ == '__main__':
     print('infer_time:', time.time() - s)
     print("FPS:%f" % (1 / (time.time() - s)))
 
-    print(out.shape)
 
 
