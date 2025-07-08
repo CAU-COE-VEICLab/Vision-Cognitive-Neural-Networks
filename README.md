@@ -108,14 +108,14 @@ python -m torch.distributed.launch --nproc_per_node <num-of-gpus-to-use>  main.p
 --cfg <config-file, e.g.,  configs/sota_benchmark/vcnn/vcm_small_1k.yaml > --data-path <imagenet-path> [--batch-size <batch-size-per-gpu> --output <output-directory> --tag <job-tag>]
 ```
 
-To train the `VCogM-24.7M` on Agri170K, run:
+To train the `VCogM-24M` on Agri170K, run:
 
 ```bash
 python -m torch.distributed.launch --nproc_per_node <num-of-gpus-to-use>  main.py \
 --cfg <config-file, e.g.,  configs/vcnu_agri17k/vcnn/pretrain/vcm_tiny_agri17k.yaml > --data-path <imagenet-path> [--batch-size <batch-size-per-gpu> --output <output-directory> --tag <job-tag>]
 ```
 
-To train the `VCNU-20.8M` on Agri170K, run:
+To train the `VCNU-20M` on Agri170K, run:
 
 ```bash
 python -m torch.distributed.launch --nproc_per_node <num-of-gpus-to-use>  main.py \
@@ -138,8 +138,8 @@ TODOs
 | VCNU-S | ImageNet-1K | 224x224 | 80.8 |  21M | 4G | [baidu]()  | [baidu]()  |
 | VCNU-B | ImageNet-1K | 224x224 | 81.8 |  37M | 6.8G | [baidu]() | - |
 | VCogM-T | ImageNet-1K | 224x224 | 82.5 | 25M | 4.3G | [baidu]() | [baidu]()  |
-| VCogM-S | ImageNet-22K | 224x224 | 83.9 |  48M | 8.7G | [baidu]()  | - |
-| VCogM-B | ImageNet-22K | 224x224 | 84.4 |  92M | 17.1G | [baidu]()  | - |
+| VCogM-S | ImageNet-1K | 224x224 | 83.9 |  48M | 8.7G | [baidu]()  | - |
+| VCogM-B | ImageNet-1K | 224x224 | 84.4 |  92M | 17.1G | [baidu]()  | - |
 
 ## Agri170K dataset
 
