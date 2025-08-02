@@ -1,6 +1,6 @@
 <div align="center">
 
-<h1>The potential of cognitive-inspired neural network modeling framework <br /> for computer vision processing tasks <br /></h1> 
+<h1>The Potential of Cognitive-Inspired Neural Network Modeling framework <br /> for computer vision <br /></h1> 
 
 <div>
     <a>Guorun Li</a>;
@@ -9,7 +9,7 @@
     <a>Yuefeng Du*</a>;
 </div>
 
-<h3><strong>submitted to Advanced Science in 2025</strong></h3>
+<h3><strong>Accepted by Advanced Science in 2025</strong></h3>
 
 </div>
 
