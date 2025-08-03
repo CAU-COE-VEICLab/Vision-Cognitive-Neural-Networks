@@ -149,11 +149,8 @@ We constructed a large-scale agricultural image dataset-Agri170K, comprising **9
 
 These images cover various scenes, including fruits, animals, crops, and agricultural machinery. 
 
-You can click this [link](https://drive.google.com/drive/folders/1L8yOT3EHHXxcVGlxBZwIIativjOw-r7X?usp=drive_link) to download Agri170K-val. 
+You can click this [link](https://drive.google.com/drive/folders/1L8yOT3EHHXxcVGlxBZwIIativjOw-r7X?usp=drive_link) to download Agri170K(train-val). 
 
-**Notes**:
-
-- Due to the investment of funds for the work, we will make the training data publicly available after the article has been accepted.
 
 ## Acknowledge
 
