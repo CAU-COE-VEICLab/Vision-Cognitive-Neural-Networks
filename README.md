@@ -28,9 +28,10 @@ Vision deep neural networks (VDNNs) only simulate the attention-based significan
 
 
 ## 🏠 Overview
-![figure1](figure/figure1.png)
-![imagenet1k](figure/figure2.png)
-![agri171k](figure/figure3.png)
+![figure1](figure/CMF.jpg)
+![VcogM](figure/VCogM.jpg)
+![imagenet1k](figure/figure1.jpg)
+![agri171k](figure/figure1.jpg)
 
 ## 🎁 Train and Test
 We have provided detailed instructions for model training and testing and experimental details. 
