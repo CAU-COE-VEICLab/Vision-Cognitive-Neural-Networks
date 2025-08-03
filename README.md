@@ -23,7 +23,8 @@
 
 
 ## 🏠 Abstract
-Visual computation models represented by deep neural networks (VDNNs) focus on replicating the selection of human visual attention, not the full spectrum of visual cognition, reflecting the divide between cognitive science (CS) and artificial intelligence (AI). To address this problem, we propose a cognitive modeling framework (CMF) that consists of three steps: abstracting cognitive function using functional, instantiating information transfer pipelines, and finally algorithmizing functional. Key challenges include modeling memory in VDNNs. We define memory in VDNNs as a priori information consisting of basic features in an image. We then introduce the Unbiased Mapping Algorithm (UMA), which uses the Fast Fourier Transform and statistical methods to model the priori information as long-term memory. Based on CMF and UMA, we develop the Visual Cognitive Neural Unit and Model, achieving top performance in various recognition tasks including natural scenes and smart agriculture. This work promotes the integration of AI and CS.
+Vision deep neural networks (VDNNs) only simulate the attention-based significance selection function in human visual perception, rather than the full spectrum of visual cognition, reflecting the divide between cognitive science (CS) and artificial intelligence (AI). To address this problem, we propose a cognitive modeling framework (CMF) comprising three stages: functional abstraction, operator structuring, and program agent. Then, we define the prior information of basic image features as the long-term memory content in VDNNs. Meanwhile, we introduce a memory modeling method for VDNNs based on the fast Fourier transform (FFT) and statistical methods—the unbiased mapping algorithm (UMA). Finally, we develop visual cognitive neural units (VCNUs) and a baseline model (VCogM) based on CMF and UMA, and conduct performance testing experiments on different datasets such as natural scene recognition and agricultural image classification. The results show that VCogM and VCNU achieved state-of-the-art (SOTA) performance across various recognition tasks. The model’s learning process is independent of data distribution and scale, fully demonstrating the rationality of cognitive-inspired modeling principles. The research findings provide new insights into the deep integration of CS and AI.
+
 
 
 ## 🏠 Overview
@@ -37,8 +38,8 @@ We have provided detailed instructions for model training and testing and experi
 - Clone this repo:
 
 ```bash
-conda create -n dt python=3.10 -y
-conda activate dt
+conda create -n vdnn python=3.10 -y
+conda activate vdnn
 git clone https://github.com/CAU-COE-VEICLab/Vision-Cognitive-Neural-Networks.git
 cd Vision-Cognitive-Neural-Networks
 ```
@@ -108,14 +109,14 @@ python -m torch.distributed.launch --nproc_per_node <num-of-gpus-to-use>  main.p
 --cfg <config-file, e.g.,  configs/sota_benchmark/vcnn/vcm_small_1k.yaml > --data-path <imagenet-path> [--batch-size <batch-size-per-gpu> --output <output-directory> --tag <job-tag>]
 ```
 
-To train the `VCogM-24M` on Agri170K, run:
+To train the `VCogM-25M` on Agri170K, run:
 
 ```bash
 python -m torch.distributed.launch --nproc_per_node <num-of-gpus-to-use>  main.py \
 --cfg <config-file, e.g.,  configs/vcnu_agri17k/vcnn/pretrain/vcm_tiny_agri17k.yaml > --data-path <imagenet-path> [--batch-size <batch-size-per-gpu> --output <output-directory> --tag <job-tag>]
 ```
 
-To train the `VCNU-20M` on Agri170K, run:
+To train the `VCNU-21M` on Agri170K, run:
 
 ```bash
 python -m torch.distributed.launch --nproc_per_node <num-of-gpus-to-use>  main.py \
