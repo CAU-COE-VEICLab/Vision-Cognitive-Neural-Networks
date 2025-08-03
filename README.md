@@ -1,6 +1,6 @@
 <div align="center">
 
-<h1>The Potential of Cognitive-Inspired Neural Network Modeling framework <br /> for computer vision <br /></h1> 
+<h1>The Potential of Cognitive-Inspired Neural Network Modeling framework for Computer Vision</h1> 
 
 <div>
     <a>Guorun Li</a>;
